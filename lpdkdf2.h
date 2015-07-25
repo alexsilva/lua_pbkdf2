@@ -8,7 +8,7 @@
 #if defined(_MSC_VER)
     //  Microsoft
     #define LUA_LIBRARY __declspec(dllexport)
-#else defined(_GCC)
+#else
     //  GCC
     #define LUA_LIBRARY __attribute__((visibility("default")))
 #endif
