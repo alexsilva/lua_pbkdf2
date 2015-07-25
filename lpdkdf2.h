@@ -5,7 +5,14 @@
 #ifndef LUA_PBKDF2_LBPDKDF2_H
 #define LUA_PBKDF2_LBPDKDF2_H
 
-#define LUA_LIBRARY __declspec(dllexport)
+#if defined(_MSC_VER)
+    //  Microsoft
+    #define LUA_LIBRARY __declspec(dllexport)
+#else defined(_GCC)
+    //  GCC
+    #define LUA_LIBRARY __attribute__((visibility("default")))
+#endif
+
 #include "lua.h"
 
 int LUA_LIBRARY lua_lpbkdf2open(lua_State *);
