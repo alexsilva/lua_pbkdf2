@@ -11,7 +11,12 @@
 // max base64 size result supported
 #define BUFF_SIZE 1024 * 32
 
-
+/*
+ * params
+ * 1: password
+ * 2: salt
+ * 3 iterations
+ */
 void pbkdf2_hmac_sha256(lua_State *L) {
     char *pwd = luaL_check_string(L, 1);
     char *salt = luaL_check_string(L, 2);
