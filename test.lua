@@ -18,7 +18,15 @@ local salt = 'eLZ6kQDRVu9n'
 local iterations = 15000
 
 -- testing
-local hash_base64 = fastpbkdf2_hmac_sha256("teste", salt, iterations)
+local hash_base64 = pbkdf2_hmac_sha256("teste", salt, iterations)
 
 print(hash_base64, pwd_base64)
 assert(hash_base64 == pwd_base64)
+
+local i = 4
+local rsalt
+while (i < 512) do
+    rsalt = rand_salt(i)
+    print(i, rsalt, strlen(rsalt) == i)
+    i = i ^ 2
+ end
