@@ -1,3 +1,6 @@
 [submodule "base64"]
 	path = base64
 	url = https://github.com/davidlazar/base64.git
+[submodule "fastpbkdf2"]
+	path = fastpbkdf2
+	url = https://github.com/ctz/fastpbkdf2
