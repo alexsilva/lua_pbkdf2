@@ -7,9 +7,38 @@
 #include <base64encode.h>
 #include "lpdkdf2.h"
 #include "fastpbkdf2/fastpbkdf2.h"
+#include <openssl/rand.h>
+#include <stdio.h>
 
 // max base64 size result supported
 #define BUFF_SIZE 1024 * 32
+
+
+// convert bytes to hex
+static void byteHex(char buff[], char key[], int size) {
+    for (int i = 0; i < size; i++) {
+        sprintf(buff + 2 * i, "%02x", key[i]);
+    }
+}
+
+
+// random salt generator
+void rand_salt(lua_State *L) {
+    lua_Object obj = lua_getparam(L, 1);
+
+    int num = (int) lua_getnumber(L, obj);
+    num = num > 0 ? num : 32;
+
+    char key[num];
+
+    if (RAND_bytes((unsigned char *) key, num)) {
+        char buff[num * 2 + 1];
+
+        byteHex(buff, key, num);
+        lua_pushlstring(L, &buff[0], num);
+    }
+    lua_pushnil(L); // error
+}
 
 /*
  * params
@@ -40,7 +69,8 @@ void pbkdf2_hmac_sha256(lua_State *L) {
 
 
 static struct luaL_reg lpbkdf2[] = {
-    {"fastpbkdf2_hmac_sha256", pbkdf2_hmac_sha256}
+    {"pbkdf2_hmac_sha256", pbkdf2_hmac_sha256},
+    {"rand_salt", rand_salt}
 };
 
 int LUA_LIBRARY lua_lpbkdf2open(lua_State *L) {
