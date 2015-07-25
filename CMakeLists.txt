@@ -20,3 +20,4 @@ set(SOURCE_FILES
 
 add_library(lua_pbkdf2 SHARED ${SOURCE_FILES})
 target_link_libraries(lua_pbkdf2 crypto ${LUA_LIB})
+set_target_properties(lua_pbkdf2 PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
