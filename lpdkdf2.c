@@ -36,8 +36,9 @@ void rand_salt(lua_State *L) {
 
         byteHex(buff, key, num);
         lua_pushlstring(L, &buff[0], num);
+    } else {
+        lua_pushnil(L); // error
     }
-    lua_pushnil(L); // error
 }
 
 /*
