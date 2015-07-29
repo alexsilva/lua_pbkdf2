@@ -96,10 +96,35 @@ void pbkdf2_hmac_sha256(lua_State *L) {
     lua_pushlstring(L, &out[0], length);
 }
 
+/*
+ * HMAC-SHA512
+ * params: password (str), salt (str), iterations (int)
+ */
+void pbkdf2_hmac_sha512(lua_State *L) {
+    char *pwd = luaL_check_string(L, 1);
+    char *salt = luaL_check_string(L, 2);
+
+    uint32_t iterations = (unsigned) luaL_check_int(L, 3);
+
+    size_t byteSize = 64; // 512-bit (64-byte)
+    char encoded[byteSize];
+
+    fastpbkdf2_hmac_sha512(
+            (unsigned char *) pwd, strlen(pwd),
+            (unsigned char *) salt, strlen(salt),
+            iterations,
+            (unsigned char *) encoded, byteSize);
+
+    char out[BUFF_SIZE];
+    int length = base64_encode((unsigned char *) encoded, byteSize, out);
+
+    lua_pushlstring(L, &out[0], length);
+}
 
 static struct luaL_reg lpbkdf2[] = {
     {"pbkdf2_hmac_sha1", pbkdf2_hmac_sha1},
     {"pbkdf2_hmac_sha256", pbkdf2_hmac_sha256},
+    {"pbkdf2_hmac_sha512", pbkdf2_hmac_sha512},
     {"rand_salt", rand_salt}
 };
 
