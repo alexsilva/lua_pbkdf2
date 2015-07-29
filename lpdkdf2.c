@@ -46,9 +46,7 @@ void rand_salt(lua_State *L) {
 
 /*
  * HMAC-SHA1
- * 1: password
- * 2: salt
- * 3 iterations
+ * params: password (str), salt (str), iterations (int)
  */
 void pbkdf2_hmac_sha1(lua_State *L) {
     char *pwd = luaL_check_string(L, 1);
