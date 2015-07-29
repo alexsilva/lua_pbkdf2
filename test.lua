@@ -13,16 +13,68 @@ end
 
 callfromlib(handle, 'lua_lpbkdf2open')
 
-local pwd_base64 = 'G8xbilfZyeNcYVAW3o9fs42l7hypVRec1XfdjoofPco='
-local salt = 'eLZ6kQDRVu9n'
-local iterations = 15000
+hashers = {
+    ['hmac_sha1'] = {
+        {
+            pwd = 'test',
+            pwd_base64 = 'Cvdv4d3xxO2uvIT8NJQ3WuEAdGs=',
+            salt = 'SaltsaltSALT',
+            iterations = 15000
+        },
+        {
+            pwd = 'Bpgb$%pdCK8#uWEw',
+            pwd_base64 = 'HxjlEcrsHwEKBdctjwWVeVzD70w=',
+            salt = 'ulVOSa99lCAi6S8h',
+            iterations = 15000
+        },
+        {
+            pwd = 'bWgbO7WQ8OIjfVtp7tcjMfcc4M78KBMK',
+            pwd_base64 = '9wKIFotQ5M2oxxkobhYZiWlgAcM=',
+            salt = 'w%#Yx6_mQZrQK=&C5N!',
+            iterations = 20000
+        }
+    },
+    ['hmac_sha256'] = {
+        {
+            pwd = 'test',
+            pwd_base64 = 'O2q3Vg/lH8+l5QKmVUqq+novPt4nSIYDZvvTpdi8PRo=',
+            salt = 'saltSALTSaLtsalt',
+            iterations = 15000
+        },
+        {
+            pwd = 'mypass',
+            pwd_base64 = 'Q2QI49JPpcJKTDf/A7IqLDbDsvnFbgViSLMqTXMiqnk=',
+            salt = 'saltSALTSaLtsalt',
+            iterations = 15000
+        },
+        {
+            pwd = '12345678',
+            pwd_base64 = '5RSe+1NV14olQNiCJ+S9ykPQd/qQjqNtO5uwqRA117s=',
+            salt = 'asdf12345',
+            iterations = 15000
+        }
+    }
+}
 
 -- testing
-local hash_base64 = pbkdf2_hmac_sha256("teste", salt, iterations)
+print('==============================')
+print('testing hmac_sha1')
+foreachi(hashers['hmac_sha1'], function(i, obj)
+    local hash_base64 = pbkdf2_hmac_sha1(obj.pwd, obj.salt, obj.iterations)
+    print(hash_base64, obj.pwd_base64)
+    assert(hash_base64 == obj.pwd_base64, '[hmac_sha1] invalid hash!')
+end)
 
-print(hash_base64, pwd_base64)
-assert(hash_base64 == pwd_base64)
+print('==============================')
+print('testing hmac_sha256')
+foreachi(hashers['hmac_sha256'], function(i, obj)
+    local hash_base64 = pbkdf2_hmac_sha256(obj.pwd, obj.salt, obj.iterations)
+    print(hash_base64, obj.pwd_base64)
+    assert(hash_base64 == obj.pwd_base64, '[hmac_sha256] invalid hash!')
+end)
 
+print('==============================')
+print('testing rand_salt')
 local i = 4
 local rsalt
 while (i < 128) do
