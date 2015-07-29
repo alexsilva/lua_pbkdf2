@@ -53,6 +53,15 @@ hashers = {
             salt = 'asdf12345',
             iterations = 15000
         }
+    },
+    --
+    ['hmac_sha512'] = {
+        {
+            pwd = '5pmU73T_e7Z+w_X@+?_QEUfu2A&-6BRKtW64qqZs',
+            pwd_base64 = 'Nc5iSSPE5Tnt3/OhMu195yHlc6Qgrr5Vs96Z1R/fhbphU1AgaBr7LMXec+Qchg8OJv8jv2wQMmTufb5/lh0Vyw==',
+            salt = 'Cm2mJ?-v',
+            iterations = 15000
+        },
     }
 }
 
@@ -71,6 +80,14 @@ foreachi(hashers['hmac_sha256'], function(i, obj)
     local hash_base64 = pbkdf2_hmac_sha256(obj.pwd, obj.salt, obj.iterations)
     print(hash_base64, obj.pwd_base64)
     assert(hash_base64 == obj.pwd_base64, '[hmac_sha256] invalid hash!')
+end)
+
+print('==============================')
+print('testing hmac_sha512')
+foreachi(hashers['hmac_sha512'], function(i, obj)
+    local hash_base64 = pbkdf2_hmac_sha512(obj.pwd, obj.salt, obj.iterations)
+    print(format("%s\n%s", hash_base64, obj.pwd_base64))
+    assert(hash_base64 == obj.pwd_base64, '[hmac_sha512] invalid hash!')
 end)
 
 print('==============================')
