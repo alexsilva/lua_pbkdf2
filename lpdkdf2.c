@@ -9,6 +9,7 @@
 #include "fastpbkdf2/fastpbkdf2.h"
 #include <openssl/rand.h>
 #include <stdio.h>
+#include <time.h>
 
 // max base64 size result supported
 #define BUFF_SIZE 1024 * 32
@@ -16,8 +17,10 @@
 
 // convert bytes to hex
 static void byteHex(char buff[], char key[], int size) {
+    srand(time(NULL));
+    char *fmt[] = {"%02x", "%02X"};
     for (int i = 0; i < size; i++) {
-        sprintf(buff + 2 * i, "%02x", key[i]);
+        sprintf(buff + 2 * i, fmt[rand() % 2], key[i]);
     }
 }
 
