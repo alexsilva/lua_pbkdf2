@@ -25,8 +25,8 @@ assert(hash_base64 == pwd_base64)
 
 local i = 4
 local rsalt
-while (i < 512) do
+while (i < 128) do
     rsalt = rand_salt(i)
     print(i, rsalt, strlen(rsalt) == i)
-    i = i ^ 2
+    i = i * 2
  end
